@@ -52,14 +52,14 @@ class Compiler
           $setting .= is_array($settingValue)
             ? $this->writeArray($settingValue)
             : $this->quote($settingValue);
-          $settings .= "$setting;";
+          $settings .= "$setting;".PHP_EOL;
         }
         foreach ($this->config['ini'] as $iniDirective => $iniValue) {
-            $settings .= "ini_set({$this->quote($iniDirective)}, {$this->quote($iniValue)});";
+            $settings .= "ini_set({$this->quote($iniDirective)}, {$this->quote($iniValue)});".PHP_EOL;
         }
         foreach ($this->config['include'] as $type => $includes) {
             foreach ($includes as $includePath) {
-                $settings .= "$type {$this->quote($includePath)};";
+                $settings .= "$type {$this->quote($includePath)};".PHP_EOL;
             }
         }
         file_put_contents($path, $settings);
