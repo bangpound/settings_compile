@@ -1,0 +1,85 @@
+<?php
+
+use Symfony\Component\ExpressionLanguage\Expression;
+
+/**
+ * PhpDumper dumps a service container as a PHP class.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @api
+ */
+class PhpDumper
+{
+    /**
+     * @var \Symfony\Component\ExpressionLanguage\ExpressionLanguage
+     */
+    private $expressionLanguage;
+
+    public function __construct(\Symfony\Component\ExpressionLanguage\ExpressionLanguage $expressionLanguage) {
+        $this->expressionLanguage = $expressionLanguage;
+    }
+
+    /**
+     * Dumps the service container as a PHP class.
+     *
+     * Available options:
+     *
+     *  * class:      The class name
+     *  * base_class: The base class name
+     *  * namespace:  The class namespace
+     *
+     * @param array $config An array of options
+     *
+     * @return string A PHP class representing of the service container
+     *
+     * @api
+     */
+    public function dump($config)
+    {
+        $code = '<?php'. PHP_EOL;
+
+        foreach ($config['settings'] as $key => $value) {
+            $code .= '$'. $key .' = '. $this->dumpValue($value) .';'.PHP_EOL;
+        }
+
+        foreach ($config['ini'] as  $key => $value) {
+            $code .= sprintf('ini_set(%s, %s);', $this->dumpValue($key), $this->dumpValue($value)) . PHP_EOL;
+        }
+
+        foreach ($config['include'] as $key => $value) {
+            foreach ($value as $val) {
+                $code .= sprintf('%s %s;', $key, $this->dumpValue($val)) .PHP_EOL;
+            }
+        }
+
+        return $code;
+    }
+
+    /**
+     * Dumps values.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    private function dumpValue($value)
+    {
+        if (is_array($value)) {
+            $code = array();
+            foreach ($value as $k => $v) {
+                $code[] = sprintf('%s => %s', $this->dumpValue($k), $this->dumpValue($v));
+            }
+
+            return sprintf('array(%s)', implode(', ', $code));
+        } elseif (is_string($value) &&  0 === strpos($value, '@=')) {
+            $expression = new Expression(substr($value, 2));
+            return $this->expressionLanguage->compile($expression, array('_SERVER','GLOBALS', 'conf'));
+        } else {
+            return var_export($value, true);
+        }
+    }
+}

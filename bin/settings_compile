@@ -16,5 +16,16 @@ foreach ($args as $key => $arg) {
 }
 list($config, $settings) = $args;
 
-$compiler = new Drupal\Settings\Compiler($config);
-$compiler->write($settings);
+$pimple = new \Pimple\Container();
+$pimple->register(new SettingsServiceProvider(), array(
+  'conf' => $config,
+  'settings' => $settings,
+));
+
+$config = $pimple['yaml']->parse(file_get_contents($pimple['conf']));
+
+$config = $pimple['processor']->processConfiguration($pimple['schema.settings'], $config);
+
+$code = $pimple['dumper']->dump($config);
+
+file_put_contents($pimple['settings'], $code);
