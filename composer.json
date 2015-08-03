@@ -7,7 +7,9 @@
         }
     ],
     "require": {
+        "pimple/pimple": "*",
         "symfony/config": "*",
+        "symfony/expression-language": "*",
         "symfony/yaml": "*"
     },
     "require-dev": {
