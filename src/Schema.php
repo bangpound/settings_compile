@@ -27,7 +27,7 @@ class Schema implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->treatNullLike(array())
                 ->children()
-                    ->arrayNode('require')->prototype('variable')->end()->end()
+                    ->arrayNode('require')->prototype('scalar')->end()->end()
                     ->arrayNode('require_once')->prototype('scalar')->end()->end()
                     ->arrayNode('include')->prototype('scalar')->end()->end()
                     ->arrayNode('include_once')->prototype('scalar')->end()->end()
