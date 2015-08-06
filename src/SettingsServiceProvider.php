@@ -44,32 +44,7 @@ class SettingsServiceProvider implements ServiceProviderInterface
 
         $pimple['drupal_settings.expression_language'] = function () {
             $language = new ExpressionLanguage();
-
-            $language->register('conf_path', function () {
-                return 'conf_path()';
-            }, function (array $values) {
-                return conf_path();
-            });
-
-            $language->register('conf_dir', function () {
-                return 'basename(conf_path())';
-            }, function (array $values) {
-                return basename(conf_path());
-            });
-
-            $language->register('basename', function ($path) {
-                return sprintf('basename(%s)', $path);
-            }, function (array $values, $path) {
-                return basename($path);
-            });
-
-            $language->register('ini_set', function ($varname, $newvalue) {
-                return sprintf('ini_set(%s, %s)', $varname, $newvalue);
-            }, function (array $values, $varname, $newvalue) {
-                ini_set($varname, $newvalue);
-
-                return '';
-            });
+            $language->registerProvider(new ExpressionFunctionProvider());
 
             return $language;
         };
