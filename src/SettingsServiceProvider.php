@@ -12,23 +12,23 @@ class SettingsServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
-        $pimple['yaml'] = function () {
+        $pimple['drupal_settings.yaml'] = function () {
             return new Parser();
         };
 
-        $pimple['processor'] = function () {
+        $pimple['drupal_settings.processor'] = function () {
             return new Processor();
         };
 
-        $pimple['schema.settings'] = function () {
+        $pimple['drupal_settings.schema.settings'] = function () {
             return new Schema();
         };
 
-        $pimple['dumper'] = function (Container $c) {
-            return new PhpDumper($c['expression_language']);
+        $pimple['drupal_settings.dumper'] = function (Container $c) {
+            return new PhpDumper($c['drupal_settings.expression_language']);
         };
 
-        $pimple['expression_language'] = function () {
+        $pimple['drupal_settings.expression_language'] = function () {
             $language = new ExpressionLanguage();
 
             $language->register('conf_path', function () {

@@ -21,14 +21,14 @@ list($config, $settings) = $args;
 
 $pimple = new Container();
 $pimple->register(new SettingsServiceProvider(), array(
-  'conf' => $config,
-  'settings' => $settings,
+  'drupal_settings.conf' => $config,
+  'drupal_settings.settings' => $settings,
 ));
 
-$config = $pimple['yaml']->parse(file_get_contents($pimple['conf']));
+$config = $pimple['drupal_settings.yaml']->parse(file_get_contents($pimple['drupal_settings.conf']));
 
-$config = $pimple['processor']->processConfiguration($pimple['schema.settings'], $config);
+$config = $pimple['drupal_settings.processor']->processConfiguration($pimple['drupal_settings.schema.settings'], $config);
 
-$code = $pimple['dumper']->dump($config);
+$code = $pimple['drupal_settings.dumper']->dump($config);
 
-file_put_contents($pimple['settings'], $code);
+file_put_contents($pimple['drupal_settings.settings'], $code);
