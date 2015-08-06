@@ -49,6 +49,7 @@ class ScriptHandler
         $options = array_merge(
           array(
             'drupal-root' => '',
+            'drupal-config' => 'config/config.yml',
           ),
           $event->getComposer()->getPackage()->getExtra()
         );
