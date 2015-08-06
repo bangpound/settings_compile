@@ -2,8 +2,6 @@
 
 namespace Drupal\Settings;
 
-use Pimple\Container;
-use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Yaml\Parser as YamlParser;
@@ -11,13 +9,6 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 class YamlFileLoader extends FileLoader
 {
     private $yamlParser;
-    private $container;
-
-    public function __construct(Container $container, FileLocatorInterface $locator)
-    {
-        $this->container = $container;
-        parent::__construct($locator);
-    }
 
     public function load($resource, $type = null)
     {
@@ -27,17 +18,19 @@ class YamlFileLoader extends FileLoader
 
         // empty file
         if (null === $content) {
-            return;
+            return array();
         }
 
         // imports
-        $this->parseImports($content, $path);
+        $content = $this->parseImports($content, $path);
 
         // extensions
         $this->loadFromExtensions($content);
 
         // services
-        $this->parseSites($content, $resource);
+        $content = $this->parseSites($content, $resource);
+
+        return $content;
     }
 
     public function supports($resource, $type = null)
@@ -54,7 +47,7 @@ class YamlFileLoader extends FileLoader
     private function parseImports($content, $file)
     {
         if (!isset($content['imports'])) {
-            return;
+            return $content;
         }
 
         if (!is_array($content['imports'])) {
@@ -67,8 +60,10 @@ class YamlFileLoader extends FileLoader
             }
 
             $this->setCurrentDir(dirname($file));
-            $this->import($import['resource'], null, isset($import['ignore_errors']) ? (bool) $import['ignore_errors'] : false, $file);
+            $content = array_merge($content, $this->import($import['resource'], null, isset($import['ignore_errors']) ? (bool) $import['ignore_errors'] : false, $file));
         }
+
+        return $content;
     }
 
     /**
@@ -79,7 +74,7 @@ class YamlFileLoader extends FileLoader
      */
     private function parseSites($content, $file)
     {
-        $this->parseSite($content['drupal']);
+        return $this->parseSite($content['drupal']);
     }
 
     private function parseSite($config)
@@ -88,7 +83,7 @@ class YamlFileLoader extends FileLoader
             $config[$k] = $this->resolveValue($v);
         }
 
-        $this->container['drupal_settings.config'] = array('drupal' => $config);
+        return array('drupal' => $config);
     }
 
     protected function loadFile($file)
