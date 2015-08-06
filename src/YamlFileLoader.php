@@ -24,9 +24,6 @@ class YamlFileLoader extends FileLoader
         // imports
         $content = $this->parseImports($content, $path);
 
-        // extensions
-        $this->loadFromExtensions($content);
-
         // services
         $content = $this->parseSites($content, $resource);
 
@@ -74,7 +71,11 @@ class YamlFileLoader extends FileLoader
      */
     private function parseSites($content, $file)
     {
-        return $this->parseSite($content['drupal']);
+        foreach ($content as $k => $v) {
+            $content[$k] = $this->parseSite($v);
+        }
+
+        return $content;
     }
 
     private function parseSite($config)
@@ -83,7 +84,7 @@ class YamlFileLoader extends FileLoader
             $config[$k] = $this->resolveValue($v);
         }
 
-        return array('drupal' => $config);
+        return $config;
     }
 
     protected function loadFile($file)
@@ -104,7 +105,7 @@ class YamlFileLoader extends FileLoader
             $this->yamlParser = new YamlParser();
         }
 
-        return $this->validate($this->yamlParser->parse(file_get_contents($file)), $file);
+        return $this->yamlParser->parse(file_get_contents($file));
     }
 
     /**
@@ -147,22 +148,5 @@ class YamlFileLoader extends FileLoader
         }
 
         return $value;
-    }
-
-    private function loadFromExtensions($content)
-    {
-        foreach ($content as $namespace => $values) {
-            if (in_array($namespace, array('imports'))) {
-                continue;
-            }
-
-            if (!is_array($values)) {
-                $values = array();
-            }
-
-            if ($namespace === 'drupal') {
-                $this->container['drupal_settings.config'] = array('drupal' => $values);
-            }
-        }
     }
 }

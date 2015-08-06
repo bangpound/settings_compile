@@ -39,9 +39,10 @@ class ScriptHandler
 
         $dumper = new PhpDumper($expressionLanguage);
 
-        $code = $dumper->dump($config['drupal']);
-
-        file_put_contents($sitesDir.'/default/settings.php', $code);
+        foreach ($config as $k => $value) {
+            $code = $dumper->dump($value);
+            file_put_contents($sitesDir.'/'.$k.'/settings.php', $code);
+        }
     }
 
     protected static function getOptions(Event $event)

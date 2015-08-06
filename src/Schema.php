@@ -7,11 +7,18 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Schema implements ConfigurationInterface
 {
+    private $name;
+
+    public function __construct($name = 'default')
+    {
+        $this->name = $name;
+    }
+
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('drupal');
-        $rootNode->children()
+        $siteNode = $treeBuilder->root($this->name);
+        $siteNode->children()
             ->arrayNode('settings')
                 ->isRequired()
                 ->useAttributeAsKey('name')
