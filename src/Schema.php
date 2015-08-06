@@ -19,7 +19,7 @@ class Schema implements ConfigurationInterface
                 ->end()
             ->end()
             ->arrayNode('ini')
-                ->prototype('scalar')
+                ->prototype('variable')
                     ->treatNullLike(array())
                 ->end()
             ->end()
@@ -27,10 +27,10 @@ class Schema implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->treatNullLike(array())
                 ->children()
-                    ->arrayNode('require')->prototype('scalar')->end()->end()
-                    ->arrayNode('require_once')->prototype('scalar')->end()->end()
-                    ->arrayNode('include')->prototype('scalar')->end()->end()
-                    ->arrayNode('include_once')->prototype('scalar')->end()->end()
+                    ->arrayNode('require')->prototype('variable')->end()->end()
+                    ->arrayNode('require_once')->prototype('variable')->end()->end()
+                    ->arrayNode('include')->prototype('variable')->end()->end()
+                    ->arrayNode('include_once')->prototype('variable')->end()->end()
                 ->end()
             ->end();
 

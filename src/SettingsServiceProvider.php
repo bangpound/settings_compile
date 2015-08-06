@@ -5,6 +5,9 @@ namespace Drupal\Settings;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Yaml\Parser;
 
@@ -12,6 +15,17 @@ class SettingsServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
+        $pimple['drupal_settings.config'] = array();
+
+        $pimple['drupal_settings.loader'] = function (Container $c) {
+            $locator = new FileLocator($c['drupal_settings.paths']);
+            $resolver = new LoaderResolver(array(
+              new YamlFileLoader($c, $locator),
+            ));
+
+            return new DelegatingLoader($resolver);
+        };
+
         $pimple['drupal_settings.yaml'] = function () {
             return new Parser();
         };

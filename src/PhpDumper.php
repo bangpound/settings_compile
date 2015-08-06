@@ -65,10 +65,8 @@ class PhpDumper
             }
 
             return sprintf('array(%s)', implode(', ', $code));
-        } elseif (is_string($value) &&  0 === strpos($value, '@=')) {
-            $expression = new Expression(substr($value, 2));
-
-            return $this->expressionLanguage->compile($expression, array('_SERVER', 'GLOBALS', 'conf'));
+        } elseif ($value instanceof Expression) {
+            return $this->expressionLanguage->compile((string) $value, array('_SERVER', 'GLOBALS', 'conf'));
         } else {
             return var_export($value, true);
         }

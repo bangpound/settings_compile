@@ -35,14 +35,15 @@ list($config, $settings) = $args;
 
 $pimple = new Container();
 $pimple->register(new SettingsServiceProvider(), array(
-  'drupal_settings.conf' => $config,
-  'drupal_settings.settings' => $settings,
+  'drupal_settings.paths' => array(
+    dirname($config)
+  ),
 ));
 
-$config = $pimple['drupal_settings.yaml']->parse(file_get_contents($pimple['drupal_settings.conf']));
+$pimple['drupal_settings.loader']->load($config);
 
-$config = $pimple['drupal_settings.processor']->processConfiguration($pimple['drupal_settings.schema'], $config);
+$pimple['drupal_settings.processor']->processConfiguration($pimple['drupal_settings.schema'], $pimple['drupal_settings.config']);
 
-$code = $pimple['drupal_settings.dumper']->dump($config);
+$code = $pimple['drupal_settings.dumper']->dump($pimple['drupal_settings.config']['drupal']);
 
-file_put_contents($pimple['drupal_settings.settings'], $code);
+file_put_contents($settings, $code);
