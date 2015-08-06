@@ -2,6 +2,7 @@
 <?php
 
 use Drupal\Settings\SettingsServiceProvider;
+use Pimple\Container;
 
 require __DIR__.'/../bootstrap.php';
 $usage = "usage: settings_compile path/to/drupal/confd path/to/compiled/settings";
@@ -18,7 +19,7 @@ foreach ($args as $key => $arg) {
 }
 list($config, $settings) = $args;
 
-$pimple = new \Pimple\Container();
+$pimple = new Container();
 $pimple->register(new SettingsServiceProvider(), array(
   'conf' => $config,
   'settings' => $settings,

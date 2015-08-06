@@ -2,35 +2,29 @@
 
 namespace Drupal\Settings;
 
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\Yaml\Parser;
 
-class SettingsServiceProvider implements \Pimple\ServiceProviderInterface
+class SettingsServiceProvider implements ServiceProviderInterface
 {
-
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param \Pimple\Container $pimple A container instance
-     */
-    public function register(\Pimple\Container $pimple)
+    public function register(Container $pimple)
     {
-
         $pimple['yaml'] = function () {
-            return new \Symfony\Component\Yaml\Parser();
+            return new Parser();
         };
 
         $pimple['processor'] = function () {
-            return new \Symfony\Component\Config\Definition\Processor();
+            return new Processor();
         };
 
         $pimple['schema.settings'] = function () {
-            return new \Drupal\Settings\Schema();
+            return new Schema();
         };
 
-        $pimple['dumper'] = function (\Pimple\Container $c) {
+        $pimple['dumper'] = function (Container $c) {
             return new PhpDumper($c['expression_language']);
         };
 
@@ -65,6 +59,7 @@ class SettingsServiceProvider implements \Pimple\ServiceProviderInterface
                 return sprintf('ini_set(%s, %s)', $varname, $newvalue);
             }, function (array $values, $varname, $newvalue) {
                 ini_set($varname, $newvalue);
+
                 return '';
             });
 

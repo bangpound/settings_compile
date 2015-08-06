@@ -3,34 +3,22 @@
 namespace Drupal\Settings;
 
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-/**
- * PhpDumper dumps a service container as a PHP class.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Johannes M. Schmitt <schmittjoh@gmail.com>
- *
- * @api
- */
 class PhpDumper
 {
     /**
-     * @var \Symfony\Component\ExpressionLanguage\ExpressionLanguage
+     * @var ExpressionLanguage
      */
     private $expressionLanguage;
 
-    public function __construct(\Symfony\Component\ExpressionLanguage\ExpressionLanguage $expressionLanguage) {
+    public function __construct(ExpressionLanguage $expressionLanguage)
+    {
         $this->expressionLanguage = $expressionLanguage;
     }
 
     /**
-     * Dumps the service container as a PHP class.
-     *
-     * Available options:
-     *
-     *  * class:      The class name
-     *  * base_class: The base class name
-     *  * namespace:  The class namespace
+     * Dumps the settings as a PHP file.
      *
      * @param array $config An array of options
      *
@@ -40,19 +28,19 @@ class PhpDumper
      */
     public function dump($config)
     {
-        $code = '<?php'. PHP_EOL;
+        $code = '<?php'.PHP_EOL;
 
         foreach ($config['settings'] as $key => $value) {
-            $code .= '$'. $key .' = '. $this->dumpValue($value) .';'.PHP_EOL;
+            $code .= '$'.$key.' = '.$this->dumpValue($value).';'.PHP_EOL;
         }
 
         foreach ($config['ini'] as  $key => $value) {
-            $code .= sprintf('ini_set(%s, %s);', $this->dumpValue($key), $this->dumpValue($value)) . PHP_EOL;
+            $code .= sprintf('ini_set(%s, %s);', $this->dumpValue($key), $this->dumpValue($value)).PHP_EOL;
         }
 
         foreach ($config['include'] as $key => $value) {
             foreach ($value as $val) {
-                $code .= sprintf('%s %s;', $key, $this->dumpValue($val)) .PHP_EOL;
+                $code .= sprintf('%s %s;', $key, $this->dumpValue($val)).PHP_EOL;
             }
         }
 
@@ -79,7 +67,8 @@ class PhpDumper
             return sprintf('array(%s)', implode(', ', $code));
         } elseif (is_string($value) &&  0 === strpos($value, '@=')) {
             $expression = new Expression(substr($value, 2));
-            return $this->expressionLanguage->compile($expression, array('_SERVER','GLOBALS', 'conf'));
+
+            return $this->expressionLanguage->compile($expression, array('_SERVER', 'GLOBALS', 'conf'));
         } else {
             return var_export($value, true);
         }
