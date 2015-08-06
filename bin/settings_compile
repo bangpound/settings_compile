@@ -41,7 +41,7 @@ $pimple->register(new SettingsServiceProvider(), array(
 
 $config = $pimple['drupal_settings.yaml']->parse(file_get_contents($pimple['drupal_settings.conf']));
 
-$config = $pimple['drupal_settings.processor']->processConfiguration($pimple['drupal_settings.schema.settings'], $config);
+$config = $pimple['drupal_settings.processor']->processConfiguration($pimple['drupal_settings.schema'], $config);
 
 $code = $pimple['drupal_settings.dumper']->dump($config);
 

@@ -20,7 +20,7 @@ class SettingsServiceProvider implements ServiceProviderInterface
             return new Processor();
         };
 
-        $pimple['drupal_settings.schema.settings'] = function () {
+        $pimple['drupal_settings.schema'] = function () {
             return new Schema();
         };
 
