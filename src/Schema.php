@@ -33,6 +33,7 @@ class Schema implements ConfigurationInterface
                     ->arrayNode('include_once')->prototype('scalar')->end()->end()
                 ->end()
             ->end();
+
         return $treeBuilder;
     }
 }
