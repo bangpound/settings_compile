@@ -43,18 +43,6 @@ class SettingsServiceProvider implements ServiceProviderInterface
                 return basename($path);
             });
 
-            $language->register('date_create', function ($time) {
-                return sprintf('date_create(%s)', $time);
-            }, function (array $values, $time) {
-                return date_create($time);
-            });
-
-            $language->register('date_format', function ($date, $format) {
-                return sprintf('date_format(%s, %s)', $date, $format);
-            }, function (array $values, $date, $format) {
-                return date_format($date, $format);
-            });
-
             $language->register('ini_set', function ($varname, $newvalue) {
                 return sprintf('ini_set(%s, %s)', $varname, $newvalue);
             }, function (array $values, $varname, $newvalue) {
