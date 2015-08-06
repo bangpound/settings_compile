@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+use Drupal\Settings\SettingsServiceProvider;
+
 require __DIR__.'/../bootstrap.php';
 $usage = "usage: settings_compile path/to/drupal/confd path/to/compiled/settings";
 $args = array_slice($argv, 1);

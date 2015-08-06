@@ -1,5 +1,7 @@
 <?php
 
+namespace Drupal\Settings;
+
 use Symfony\Component\ExpressionLanguage\Expression;
 
 /**

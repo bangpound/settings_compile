@@ -1,4 +1,7 @@
 <?php
+
+namespace Drupal\Settings;
+
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class SettingsServiceProvider implements \Pimple\ServiceProviderInterface
