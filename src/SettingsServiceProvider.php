@@ -37,6 +37,12 @@ class SettingsServiceProvider implements ServiceProviderInterface
                 return conf_path();
             });
 
+            $language->register('conf_dir', function () {
+                return 'basename(conf_path())';
+            }, function (array $values) {
+                return basename(conf_path());
+            });
+
             $language->register('basename', function ($path) {
                 return sprintf('basename(%s)', $path);
             }, function (array $values, $path) {
