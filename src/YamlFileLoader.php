@@ -40,6 +40,8 @@ class YamlFileLoader extends FileLoader
      *
      * @param array  $content
      * @param string $file
+     *
+     * @return array
      */
     private function parseImports($content, $file)
     {
@@ -68,6 +70,8 @@ class YamlFileLoader extends FileLoader
      *
      * @param array  $content
      * @param string $file
+     *
+     * @return array
      */
     private function parseSites($content, $file)
     {
