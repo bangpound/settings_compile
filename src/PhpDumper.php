@@ -38,9 +38,11 @@ class PhpDumper
             $code .= sprintf('ini_set(%s, %s);', $this->dumpValue($key), $this->dumpValue($value)).PHP_EOL;
         }
 
-        foreach ($config['include'] as $key => $value) {
-            foreach ($value as $val) {
-                $code .= sprintf('%s %s;', $key, $this->dumpValue($val)).PHP_EOL;
+        if (isset($config['include'])) {
+            foreach ($config['include'] as $key => $value) {
+                foreach ($value as $val) {
+                    $code .= sprintf('%s %s;', $key, $this->dumpValue($val)).PHP_EOL;
+                }
             }
         }
 
