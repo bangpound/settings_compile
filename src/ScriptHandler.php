@@ -20,7 +20,6 @@ class ScriptHandler
         $configFile = $cwd.'/'.$options['drupal-config'];
 
         $sitesDir = $targetDir.'/sites';
-        $config = array();
 
         $locator = new FileLocator(array(dirname($configFile)));
         $resolver = new LoaderResolver(array(
@@ -29,7 +28,7 @@ class ScriptHandler
 
         $loader = new DelegatingLoader($resolver);
 
-        $config = array_merge($config, $loader->load($configFile));
+        $config = $loader->load($configFile);
 
         $processor = new Processor();
         $processor->processConfiguration(new Schema(), $config);
