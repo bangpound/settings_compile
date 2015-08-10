@@ -112,37 +112,6 @@ class YamlFileLoader extends FileLoader
         return $this->yamlParser->parse(file_get_contents($file));
     }
 
-    /**
-     * Validates a YAML file.
-     *
-     * @param mixed  $content
-     * @param string $file
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException When service file is not valid
-     */
-    private function validate($content, $file)
-    {
-        if (null === $content) {
-            return $content;
-        }
-
-        if (!is_array($content)) {
-            throw new \InvalidArgumentException(sprintf('The service file "%s" is not valid. It should contain an array. Check your YAML syntax.', $file));
-        }
-
-        foreach ($content as $namespace => $data) {
-            if (in_array($namespace, array('imports', 'drupal'))) {
-                continue;
-            }
-
-            throw new \InvalidArgumentException();
-        }
-
-        return $content;
-    }
-
     private function resolveValue($value)
     {
         if (is_array($value)) {
