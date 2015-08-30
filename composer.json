@@ -7,9 +7,10 @@
         }
     ],
     "require": {
-        "symfony/config": "*",
-        "symfony/expression-language": "*",
-        "symfony/yaml": "*"
+        "symfony/config": "~2.7",
+        "symfony/expression-language": "~2.7",
+        "symfony/filesystem": "~2.7",
+        "symfony/yaml": "~2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
