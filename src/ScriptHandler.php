@@ -8,11 +8,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ScriptHandler
 {
     public static function buildSettings(Event $event)
     {
+        $filesystem = new Filesystem();
         $cwd = getcwd();
         $options = self::getOptions($event);
 
@@ -42,6 +44,7 @@ class ScriptHandler
 
         foreach ($config as $k => $value) {
             $code = $dumper->dumpSettings($value);
+            $filesystem->mkdir($sitesDir.'/'.$k);
             file_put_contents($sitesDir.'/'.$k.'/settings.php', $code);
 
             // Process aliases.
