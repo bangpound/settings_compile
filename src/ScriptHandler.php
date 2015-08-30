@@ -39,7 +39,7 @@ class ScriptHandler
         $dumper = new PhpDumper($expressionLanguage);
 
         foreach ($config as $k => $value) {
-            $code = $dumper->dump($value);
+            $code = $dumper->dumpSettings($value);
             file_put_contents($sitesDir.'/'.$k.'/settings.php', $code);
         }
     }

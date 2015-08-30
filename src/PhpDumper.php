@@ -26,7 +26,7 @@ class PhpDumper
      *
      * @return string PHP code representing the site settings.
      */
-    public function dump($config)
+    public function dumpSettings($config)
     {
         $code = self::START;
 
