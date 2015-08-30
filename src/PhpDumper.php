@@ -7,6 +7,8 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class PhpDumper
 {
+    const START = '<?php'.PHP_EOL;
+
     /**
      * @var ExpressionLanguage
      */
@@ -28,7 +30,7 @@ class PhpDumper
      */
     public function dump($config)
     {
-        $code = '<?php'.PHP_EOL;
+        $code = self::START;
 
         foreach ($config['settings'] as $key => $value) {
             $code .= '$'.$key.' = '.$this->dumpValue($value).';'.PHP_EOL;
