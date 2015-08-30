@@ -50,6 +50,22 @@ class PhpDumper
     }
 
     /**
+     * @param $sites
+     *
+     * @return string
+     */
+    public function dumpSites($sites)
+    {
+        $code = self::START;
+
+        foreach ($sites as $key => $value) {
+            $code .= '$sites[\''.$key.'\'] = '.$this->dumpValue($value).';'.PHP_EOL;
+        }
+
+        return $code;
+    }
+
+    /**
      * Dumps values.
      *
      * @param mixed $value

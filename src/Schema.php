@@ -19,6 +19,10 @@ class Schema implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $siteNode = $treeBuilder->root($this->name);
         $siteNode->children()
+            ->arrayNode('aliases')
+                ->prototype('scalar')
+                ->end()
+            ->end()
             ->arrayNode('settings')
                 ->isRequired()
                 ->useAttributeAsKey('name')

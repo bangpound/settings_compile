@@ -38,9 +38,28 @@ class ScriptHandler
 
         $dumper = new PhpDumper($expressionLanguage);
 
+        $sites = array();
+
         foreach ($config as $k => $value) {
             $code = $dumper->dumpSettings($value);
             file_put_contents($sitesDir.'/'.$k.'/settings.php', $code);
+
+            // Process aliases.
+            if (!isset($value['aliases'])) {
+                continue;
+            }
+
+            foreach ($value['aliases'] as $alias) {
+                if (isset($sites[$alias])) {
+                    throw new \RuntimeException(sprintf('Alias %s already defined', $alias));
+                }
+                $sites[$alias] = $k;
+            }
+        }
+
+        if (!empty($sites)) {
+            $code = $dumper->dumpSites($sites);
+            file_put_contents($sitesDir.'/sites.php', $code);
         }
     }
 
