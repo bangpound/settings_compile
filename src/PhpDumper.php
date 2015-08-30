@@ -24,9 +24,7 @@ class PhpDumper
      *
      * @param array $config An array of options
      *
-     * @return string A PHP class representing of the service container
-     *
-     * @api
+     * @return string PHP code representing the site settings.
      */
     public function dump($config)
     {
