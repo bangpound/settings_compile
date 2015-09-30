@@ -7,7 +7,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class PhpDumper
 {
-    const START = '<?php'.PHP_EOL;
+    const START = "<?php\n";
 
     /**
      * @var ExpressionLanguage
